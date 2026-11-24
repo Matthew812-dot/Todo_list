@@ -1,0 +1,94 @@
+﻿<Window x:Class="TodoList.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Список задач" Height="700" Width="1100"
+        MinHeight="600" MinWidth="950"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="12,6" />
+            <Setter Property="Margin" Value="0,0,8,0" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="300" />
+        </Grid.ColumnDefinitions>
+
+        <DockPanel Grid.ColumnSpan="3" Margin="0,0,0,16">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                <Button x:Name="LoadButton" Content="Загрузить JSON" Click="LoadButton_Click" />
+                <Button x:Name="SaveButton" Content="Сохранить JSON" Click="SaveButton_Click" Margin="0" />
+            </StackPanel>
+            <TextBlock Text="Мои задачи" FontSize="26" FontWeight="SemiBold" />
+        </DockPanel>
+
+        <DataGrid x:Name="TasksGrid" Grid.Row="1"
+                  AutoGenerateColumns="False" IsReadOnly="True"
+                  CanUserAddRows="False" CanUserDeleteRows="False"
+                  SelectionMode="Single" SelectionUnit="FullRow"
+                  SelectionChanged="TasksGrid_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Название" Binding="{Binding Title}" Width="*" MinWidth="120" />
+                <DataGridTextColumn Header="Создана" Binding="{Binding CreatedAt, StringFormat=dd.MM.yyyy}" Width="95" />
+                <DataGridTextColumn Header="Срок" Binding="{Binding DueDate, StringFormat=dd.MM.yyyy}" Width="95" />
+                <DataGridTextColumn Header="Приоритет" Binding="{Binding Priority}" Width="90" />
+                <DataGridTextColumn Header="Статус" Binding="{Binding Status}" Width="100" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <ScrollViewer Grid.Row="1" Grid.Column="2" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock Text="Данные задачи" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,12" />
+
+                <Label Content="Название" Target="{Binding ElementName=TitleTextBox}" Padding="0,0,0,4" />
+                <TextBox x:Name="TitleTextBox" Margin="0,0,0,12" />
+
+                <Label Content="Описание" Target="{Binding ElementName=DescriptionTextBox}" Padding="0,0,0,4" />
+                <TextBox x:Name="DescriptionTextBox" Height="90" AcceptsReturn="True"
+                         TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Margin="0,0,0,12" />
+
+                <Label Content="Срок выполнения (необязательно)"
+                       Target="{Binding ElementName=DueDatePicker}" Padding="0,0,0,4" />
+                <DatePicker x:Name="DueDatePicker" Margin="0,0,0,12" />
+
+                <Label Content="Приоритет" Target="{Binding ElementName=PriorityComboBox}" Padding="0,0,0,4" />
+                <ComboBox x:Name="PriorityComboBox" SelectedIndex="1" SelectedValuePath="Tag" Margin="0,0,0,16">
+                    <ComboBoxItem Content="Низкий" Tag="Low" />
+                    <ComboBoxItem Content="Средний" Tag="Medium" />
+                    <ComboBoxItem Content="Высокий" Tag="High" />
+                </ComboBox>
+
+                <WrapPanel Margin="0,0,0,12">
+                    <Button x:Name="AddButton" Content="Добавить" Click="AddButton_Click" />
+                    <Button x:Name="EditButton" Content="Изменить" Click="EditButton_Click" />
+                </WrapPanel>
+                <WrapPanel Margin="0,0,0,20">
+                    <Button x:Name="DeleteButton" Content="Удалить" Click="DeleteButton_Click" />
+                    <Button x:Name="ClearButton" Content="Очистить поля" Click="ClearButton_Click" />
+                </WrapPanel>
+
+                <Separator Margin="0,0,0,12" />
+                <Label Content="Статус выбранной задачи" Target="{Binding ElementName=StatusComboBox}" Padding="0,0,0,4" />
+                <ComboBox x:Name="StatusComboBox" SelectedIndex="0" SelectedValuePath="Tag" Margin="0,0,0,12">
+                    <ComboBoxItem Content="Не начата" Tag="NotStarted" />
+                    <ComboBoxItem Content="В процессе" Tag="InProgress" />
+                    <ComboBoxItem Content="Выполнена" Tag="Completed" />
+                </ComboBox>
+                <Button x:Name="ChangeStatusButton" Content="Изменить статус"
+                        Click="ChangeStatusButton_Click" HorizontalAlignment="Left" />
+            </StackPanel>
+        </ScrollViewer>
+
+        <TextBlock Grid.Row="2" Grid.ColumnSpan="3" Margin="0,12,0,0" TextWrapping="Wrap"
+                   Text="Выберите задачу в таблице для редактирования. Для сохранения изменений в файл нажмите «Сохранить JSON»." />
+    </Grid>
+</Window>

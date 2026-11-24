@@ -1,0 +1,9 @@
+﻿# Visual Studio and build output
+.vs/
+bin/
+obj/
+*.user
+*.suo
+
+# Local task data
+tasks.json
